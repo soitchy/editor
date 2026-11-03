@@ -26,6 +26,13 @@ A build-ready spec for a daily-driver v1: a Helix-inspired modal editor in Odin 
 
 <!-- one line per closed ticket -->
 
+- [Helix keymap and selection model](tickets/007-helix-keymap-model.md): the core selection model and multicursor need no tree-sitter or LSP; command groups tiered A/B/C for picking the v1 subset.
+- [Piece tree and undo prior art](tickets/003-piece-tree-prior-art.md): piece table + B-tree index and Helix-style ChangeSet/undo tree fit; 100MB load cannot fit in one frame, so it goes off-thread.
+- [IMGUI and text rendering options in Odin](tickets/002-imgui-text-rendering.md): SDL3 is the only vendored layer covering Wayland (sokol is X11-only); kb_text_shape and microui are vendored; LCD text needs shader-side blending.
+- [How agents connect to an editor](tickets/006-agent-transport.md): diffity uses a stdio MCP relay to the app over a local socket, plus Node-based ACP for the active direction; a stdio MCP mode in the editor exe plus `claude -p` stream-json avoids Node.
+- [How review comments are stored and re-anchored](tickets/005-review-comment-anchoring.md): every system keeps a fixed original anchor and works out the current position on read; diffity uses SQLite in app data, which agents cannot read offline.
+- [Tree-sitter from Odin](tickets/004-tree-sitter-from-odin.md): laytan/odin-tree-sitter is usable once three callbacks are fixed; small reparses are usually under 1ms with rare spikes, so a short main-thread deadline then a worker fits; Helix queries are reusable (MPL-2.0).
+
 ## Not yet specified
 
 - **File picker & search**: fuzzy matcher, file walking, project-wide search.
