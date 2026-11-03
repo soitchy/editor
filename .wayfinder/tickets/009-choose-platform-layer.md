@@ -12,4 +12,4 @@ parent: map.md
 
 ## Question
 
-Which windowing/input/GPU layer does v1 build on (native per-OS, SDL3, sokol, other), weighing measured startup and load times against the cost of maintaining it across Windows, macOS, and Wayland?
+Which windowing/input/GPU layer does v1 build on (native per-OS, SDL3, other), weighing measured startup and load times against the cost of maintaining it across Windows, macOS, and Wayland?
