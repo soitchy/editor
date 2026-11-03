@@ -1,0 +1,24 @@
+A fast and native editor that combines ideas from Helix and diffity into one GUI experience.
+
+Codename pending.
+
+References
+Helix: https://github.com/helix-editor/helix
+diffity: https://github.com/nilbuild/diffity
+
+Why?
+For fun mostly, and to build something I would actually use. "Opinionated editor". Minimal feature set I find useful. No bloat.
+
+Goals:
+- Odin programming language.
+- GUI app only. Terminal UI not planned.
+- Cross platform.
+- Strong/robust core, so that later additions feel easy.
+- Native for fast window opening.
+- Operations ideally finish within one frame time, so that editing feels snappy. UI animations are an exception.
+- Fast piece-tree buffer.
+- Reduce heap allocations when possible, especially during editing. Prefer arenas. temp_allocator helps here.
+- Minimal UI. Prefer keyboard shortcuts over a busy UI
+- IMGUI for UI. Prefer speed over looking pretty. IMGUI is also easy to reason about in code.
+- Tree sitter
+- Helix modal editing experience. Selection first. Multicursor. Keyboard driven.
