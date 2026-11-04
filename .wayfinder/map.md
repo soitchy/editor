@@ -32,6 +32,7 @@ A build-ready spec for a daily-driver v1: a Helix-inspired modal editor in Odin 
 - [How agents connect to an editor](tickets/006-agent-transport.md): diffity uses a stdio MCP relay to the app over a local socket, plus Node-based ACP for the active direction; a stdio MCP mode in the editor exe plus `claude -p` stream-json avoids Node.
 - [How review comments are stored and re-anchored](tickets/005-review-comment-anchoring.md): every system keeps a fixed original anchor and works out the current position on read; diffity uses SQLite in app data, which agents cannot read offline.
 - [Tree-sitter from Odin](tickets/004-tree-sitter-from-odin.md): laytan/odin-tree-sitter is usable once three callbacks are fixed; small reparses are usually under 1ms with rare spikes, so a short main-thread deadline then a worker fits; Helix queries are reusable (MPL-2.0).
+- [Benchmark startup and file load: native Win32 vs SDL3](tickets/001-bench-platform-startup.md): on macOS, SDL3 was only 5–9ms behind native (~130ms to first frame either way, AppKit setup ~90ms of it), so startup misses the "well under 100ms" target; 100MB load is about the same on every layer. Windows not measured yet.
 
 ## Not yet specified
 
@@ -45,6 +46,7 @@ A build-ready spec for a daily-driver v1: a Helix-inspired modal editor in Odin 
 - **Split diff view**: side-by-side alongside the unified review view.
 - **GitHub PR round-trip**: check out a PR, review, post back.
 - **LSP**: wanted, but not needed until the core is figured out; the core should not preclude it.
+- **Wayland startup numbers**: run the SDL3 spike on Wayland, plus a native Wayland spike if the platform choice leans native.
 - **Spec assembly**: pulling resolved decisions into the final spec document.
 
 ## Out of scope
