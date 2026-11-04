@@ -43,7 +43,32 @@ Where the native time goes (medians): exec→`main` 11, `NSApplication` + `finis
 
 ## Results: Windows
 
-Not measured yet. To run them, follow the checklist below.
+Intel Core i9-10900 (10C/20T), 32GB, AMD Radeon Pro W5500 + Intel UHD 630, Windows 11 Enterprise 26100, Odin dev-2026-06, SDL 3 (Odin's vendored DLL), 20 runs, 100MB file read from the page cache. Full output: `build/results-win-*.txt` (not committed).
+
+**This is a managed work machine** running CrowdStrike Falcon, Tanium, and Endpoint Privilege Management (Defendpoint) alongside Defender. They hook process start and file access, so these numbers are an upper bound and not a clean-machine baseline.
+
+Medians, in ms since spawn:
+
+| Stage | native GDI | native D3D11 (`--gpu`) | SDL3 surface | SDL3 `--gpu` (D3D11) |
+|---|---:|---:|---:|---:|
+| `main` reached | 58.6 | 57.6 | 59.6 | 65.8 |
+| `sdl_init` done | | | 102.0 | 106.0 |
+| platform init done (`window`) | 97.0 | 190.2 | 154.2 | 225.9 |
+| **first frame with text** | **117.7** | **214.7** | **158.9** | **231.8** |
+| 100MB file read | +38.4 | +44.8 | +51.8 | +47.4 |
+| **first frame of file** | **166.9** | **281.7** | **212.5** | **282.8** |
+| line count over the whole file | +28.4 | +25.6 | +28.5 | +27.2 |
+
+Spread (min–max, first frame): GDI 105–155, D3D11 195–239, SDL3 surface 146–198, SDL3 GPU 216–280.
+
+- **Every option misses 100ms, even the fastest (native GDI, ~118ms).** Roughly 58ms of that is exec → `main`, before any of our code runs; on macOS the same step was ~11ms. That is the likely signature of the endpoint-security hooks, and this is the main thing a clean machine could change.
+- **Native GDI is the fastest**; SDL3 surface is ~41ms behind it (`SDL_Init` ~42ms + window ~52ms, against ~38ms for a raw `CreateWindowExW`). Native D3D11 and SDL3 GPU are both slow (~215-232ms): creating the D3D11 device and swapchain costs ~90-130ms. With SDL3, GPU vs surface is +73ms; with native, D3D11 vs GDI is +97ms.
+- **SDL3 costs far more on Windows than on macOS** (+41ms on the CPU path, vs +5-9ms on macOS), but on the GPU path the gap between the layers is small (+17ms).
+- **File load is not a platform question here either**, but is ~4x slower than macOS: 38-52ms to read 100MB from cache (macOS: ~11ms), probably scanning by the security software. The line scan is ~28ms (macOS ~13ms).
+- The first frame of the file follows the first frame by 49ms (GDI), 67ms (D3D11), 54ms (SDL3), 51ms (SDL3 GPU), almost all of it the file read.
+- Run 1 matched the median for native GDI and the D3D11 paths. Only SDL3 surface was slower on run 1 (first frame 198 vs 159ms, `main` 94 vs 60ms).
+- The Win32 spike ran correctly on its first real run. The GPU spike was checked by eye only partially (its window was behind the terminal; file text was visible at the edge).
+- Not measured: a clean machine (no endpoint security), a cold disk read, the D3D11 adapter that was picked (default adapter; the machine has two GPUs).
 
 ## Running
 

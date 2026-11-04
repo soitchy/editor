@@ -4,7 +4,7 @@ title: Choose the platform layer
 type: wayfinder:grilling
 status: open
 assignee:
-blocked_by: [001, 002, 016]
+blocked_by: [002]
 parent: map.md
 ---
 
