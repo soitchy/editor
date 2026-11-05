@@ -39,7 +39,6 @@ A build-ready spec for a daily-driver v1: a Helix-inspired modal editor in Odin 
 
 ## Not yet specified
 
-- **Present path / renderer**: SDL surface (CPU) vs SDL GPU for 144Hz and 100MB scrolling; GPU adds ~73ms to Windows startup.
 
 - **File picker & search**: fuzzy matcher, file walking, project-wide search.
 - **Buffer/project model**: how open buffers relate to a workspace root; multiple files open.
