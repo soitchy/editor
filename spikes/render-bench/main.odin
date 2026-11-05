@@ -90,6 +90,16 @@ main :: proc() {
 	w, h: i32
 	sdl.GetWindowSizeInPixels(window, &w, &h)
 
+	_ = sdl.RaiseWindow(window)
+	{
+		x, y, ww, wh: i32
+		sdl.GetWindowPosition(window, &x, &y)
+		sdl.GetWindowSize(window, &ww, &wh)
+		fmt.printfln("WINRECT %d,%d,%d,%d", x, y, ww, wh)
+	}
+	if mode == "fx-renderer" { fx_renderer(window, file, frames, vsync); return }
+	if mode == "fx-gpu" { fx_gpu(window, file, frames, vsync); return }
+
 	renderer: ^sdl.Renderer
 	canvas_tex, atlas_tex: ^sdl.Texture
 	if mode != "surface" {
@@ -167,4 +177,27 @@ main :: proc() {
 	_ = sdl.WaitEventTimeout(&ev, 2000)
 	fmt.printfln("idle 2s: cpu %.1f ms", (cpu_seconds() - cpu1) * 1000)
 	sdl.Quit()
+}
+
+println_summary :: proc(label: string, frames: int, wall, cpu: f64, times: []f64) {
+	fmt.printfln("%s: %d frames in %.2fs = %.0f fps, cpu %.0f%%", label, frames, wall, f64(frames) / wall, cpu / wall * 100)
+	report("frame", times)
+}
+
+// Shared setup for the shader modes: font, file and a line index.
+Text_State :: struct {
+	font:   bench.Font,
+	data:   []u8,
+	starts: [dynamic]int,
+}
+
+text_state_load :: proc(window: ^sdl.Window, file: string) -> (s: Text_State) {
+	w, h: i32
+	sdl.GetWindowSizeInPixels(window, &w, &h)
+	s.font, _ = bench.font_load(15 * f32(w) / bench.WINDOW_W)
+	s.data = bench.load_file(file)
+	s.starts = make([dynamic]int, 0, 3_000_000)
+	append(&s.starts, 0)
+	for b, i in s.data do if b == '\n' && i + 1 < len(s.data) do append(&s.starts, i + 1)
+	return
 }
