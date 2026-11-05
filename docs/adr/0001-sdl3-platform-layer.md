@@ -9,6 +9,6 @@ v1 uses SDL3 for windowing, input, clipboard and present on Windows, macOS and L
 
 ## Consequences
 
-- The editor core must not use `SDL_*` types. It sees a thin platform seam (window, events, clipboard, present), so a native backend can replace SDL3 one file per OS.
+- The editor calls SDL directly. There is no platform abstraction layer: simple code the maintainer can hold in their head matters more than the option of swapping SDL out. Keep SDL calls mostly in a few files so they are easy to find.
 - The startup target is "as close to the OS floor as we can get", not "well under 100ms".
 - SDL3 ships as a ~2.5-2.8MB shared library.

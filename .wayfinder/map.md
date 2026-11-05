@@ -37,7 +37,11 @@ A build-ready spec for a daily-driver v1: a Helix-inspired modal editor in Odin 
 
 - [Choose the platform layer](tickets/009-choose-platform-layer.md): SDL3 on every OS behind a thin platform seam; native windows only as a later optimisation; startup target restated as "close to the OS floor".
 
+- [Choose the present path and text renderer](tickets/019-present-path-renderer.md): raw SDL GPU API with a glyph atlas, for custom vertex and fragment shader effects; CPU-canvas paths cost 4-5ms of CPU per frame.
+
 ## Not yet specified
+
+- **Shader build pipeline**: how shaders are authored once and shipped as MSL, SPIR-V and DXIL (SDL's own examples keep HLSL plus precompiled outputs); untested outside macOS.
 
 
 - **File picker & search**: fuzzy matcher, file walking, project-wide search.
