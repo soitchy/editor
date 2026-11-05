@@ -35,7 +35,11 @@ A build-ready spec for a daily-driver v1: a Helix-inspired modal editor in Odin 
 - [Benchmark startup and file load: native Win32 vs SDL3](tickets/001-bench-platform-startup.md): on macOS, SDL3 was only 5–9ms behind native (~130ms to first frame either way, AppKit setup ~90ms of it), so startup misses the "well under 100ms" target; 100MB load is about the same on every layer.
 - [Run the platform benchmark on Windows](tickets/016-bench-platform-windows.md): on a managed machine (EDR installed) native GDI reaches the first frame in ~118ms, SDL3 surface ~159ms, and both D3D11 paths ~215-232ms; ~58ms passes before `main`, so every option misses 100ms; a clean-machine rerun is a new ticket.
 
+- [Choose the platform layer](tickets/009-choose-platform-layer.md): SDL3 on every OS behind a thin platform seam; native windows only as a later optimisation; startup target restated as "close to the OS floor".
+
 ## Not yet specified
+
+- **Present path / renderer**: SDL surface (CPU) vs SDL GPU for 144Hz and 100MB scrolling; GPU adds ~73ms to Windows startup.
 
 - **File picker & search**: fuzzy matcher, file walking, project-wide search.
 - **Buffer/project model**: how open buffers relate to a workspace root; multiple files open.
